@@ -1,0 +1,59 @@
+version: '3.3'
+
+services:
+  php:
+    build:
+      context: ./php
+    restart: always
+    volumes:
+      - ./src:/home/app/src:Z
+    links:
+      - mysql_gateway
+      - redis
+    working_dir: /home/app/src
+
+  nginx:
+    image: nginx:1.14.2-alpine
+    restart: always
+    volumes:
+      - ./nginx/resolve.conf:/etc/nginx/conf.d/default.conf
+      - ./src:/home/app/src
+    links:
+      - php
+    ports:
+      - 127.0.0.1:70:80
+    working_dir: /home/app/src
+
+  mysql_gateway:
+    image: mariadb:10.6
+    container_name: mysql_gateway
+    restart: always
+    volumes:
+      - ./mysql/data:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=secret
+      - MYSQL_DATABASE=gateway
+      - MYSQL_USER=homestead
+      - MYSQL_PASSWORD=secret
+    ports:
+    - 127.0.0.1:3306:3306
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    environment:
+      - PMA_ARBITRARY=1
+      - PMA_HOST=mysql
+      - PMA_PORT=3306
+    ports:
+      - 71:80
+    volumes:
+      - /sessions
+    links:
+      - mysql_gateway
+
+  redis:
+    image: redis:alpine
+
+volumes:
+  composer-cache:
