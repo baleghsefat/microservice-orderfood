@@ -21,6 +21,6 @@ class ExampleJob extends Job
      */
     public function handle()
     {
-        //
+
     }
 }

@@ -1,21 +1,21 @@
-COMPOSE_FILES=docker-compose.yml
+COMPOSE_FILES=gateway/docker-compose.yml
 USER=app
 GROUP=app
 
-build:
-	docker-compose -f $(COMPOSE_FILES) up -d --build
+gateway-build:
+	docker-compose -f $(COMPOSE_FILES) build
 
-up:
+gateway-up:
 	docker-compose -f $(COMPOSE_FILES) up -d
 
-destroy:
+gateway-destroy:
 	docker-compose -f $(COMPOSE_FILES) down
 
-status:
+gateway-status:
 	docker-compose -f $(COMPOSE_FILES) ps
 
-command:
+gateway-command:
 	docker-compose -f $(COMPOSE_FILES) exec --user=$(shell echo $$(id -u)':'$$(id -g)) php zsh
 
-shell-as-root:
+gateway-shell-as-root:
 	docker-compose -f $(COMPOSE_FILES) exec php zsh
