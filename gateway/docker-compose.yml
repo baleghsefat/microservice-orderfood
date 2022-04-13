@@ -2,13 +2,14 @@ version: '3.3'
 
 services:
   php:
+    container_name: php_gateway
     build:
       context: ./php
     restart: always
     volumes:
       - ./src:/home/app/src:Z
     links:
-      - mysql_gateway
+      - mysql
       - redis
     working_dir: /home/app/src
 
@@ -24,7 +25,7 @@ services:
       - 127.0.0.1:70:80
     working_dir: /home/app/src
 
-  mysql_gateway:
+  mysql:
     image: mariadb:10.6
     container_name: mysql_gateway
     restart: always
@@ -36,7 +37,7 @@ services:
       - MYSQL_USER=homestead
       - MYSQL_PASSWORD=secret
     ports:
-    - 127.0.0.1:3306:3306
+      - 127.0.0.1:33060:3306
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
@@ -50,7 +51,7 @@ services:
     volumes:
       - /sessions
     links:
-      - mysql_gateway
+      - mysql
 
   redis:
     image: redis:alpine
