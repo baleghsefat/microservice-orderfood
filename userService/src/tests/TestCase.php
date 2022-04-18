@@ -2,6 +2,8 @@
 
 namespace Tests;
 
+use App\Events\LoginEvent;
+use Illuminate\Support\Facades\Event;
 use Laravel\Lumen\Testing\TestCase as BaseTestCase;
 
 abstract class TestCase extends BaseTestCase
@@ -12,6 +14,10 @@ abstract class TestCase extends BaseTestCase
     protected function setUp(): void
     {
         parent::setUp();
+
+        Event::fake([
+            LoginEvent::class,
+        ]);
 
         $this->artisan('migrate:fresh');
     }

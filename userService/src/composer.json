@@ -8,6 +8,7 @@
         "php": "^8.0",
         "anik/form-request": "^4.4",
         "laravel/lumen-framework": "^9.0",
+        "php-amqplib/php-amqplib": "^3.2",
         "tymon/jwt-auth": "dev-develop"
     },
     "require-dev": {

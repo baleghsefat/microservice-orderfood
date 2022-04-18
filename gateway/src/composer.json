@@ -1,15 +1,19 @@
 {
     "name": "laravel/lumen",
     "description": "The Laravel Lumen Framework.",
-    "keywords": ["framework", "laravel", "lumen"],
+    "keywords": [
+        "framework",
+        "laravel",
+        "lumen"
+    ],
     "license": "MIT",
     "type": "project",
     "require": {
         "php": "^8.0",
+        "guzzlehttp/guzzle": "^7.4",
         "laravel/lumen-framework": "^9.0",
         "php-amqplib/php-amqplib": "^3.2",
-        "tymon/jwt-auth": "dev-develop",
-        "vladimir-yuldashev/laravel-queue-rabbitmq": "^12.0"
+        "tymon/jwt-auth": "dev-develop"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
@@ -21,7 +25,10 @@
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
-        }
+        },
+        "files": [
+            "app/Helpers/userServiceHelper.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {
