@@ -1,7 +1,9 @@
 GATEWAY_COMPOSE_FILE=gateway/docker-compose.yml
 USER_COMPOSE_FILE=userService/docker-compose.yml
+CATEGORY_COMPOSE_FILE=categoryService/docker-compose.yml
 MSG_BROKER_NETWORK=msg-broker-food-microservice
 USER_SERVICE_PHP_CONTAINER=php_user_serivce
+CATEGORY_SERVICE_PHP_CONTAINER=php_category_serivce
 GATEWAY_PHP_CONTAINER=php_gateway
 USER=app
 GROUP=app
@@ -49,15 +51,25 @@ msg-run:
 msg-make-network:
 	docker network disconnect --force $(MSG_BROKER_NETWORK) $(GATEWAY_PHP_CONTAINER)
 	docker network disconnect --force $(MSG_BROKER_NETWORK) $(USER_SERVICE_PHP_CONTAINER)
+	docker network disconnect --force $(MSG_BROKER_NETWORK) $(CATEGORY_SERVICE_PHP_CONTAINER)
 	docker network rm $(MSG_BROKER_NETWORK)
 	docker network create $(MSG_BROKER_NETWORK)
 	docker network connect $(MSG_BROKER_NETWORK) $(USER_SERVICE_PHP_CONTAINER)
 	docker network connect $(MSG_BROKER_NETWORK) $(GATEWAY_PHP_CONTAINER)
+	docker network connect $(MSG_BROKER_NETWORK) $(CATEGORY_SERVICE_PHP_CONTAINER)
 	echo "* * * * * GATEWAY * * * * *"
 	docker network inspect msg-broker-food-microservice --format='{{range .IPAM.Config}}{{.Gateway}}{{end}}'
 
 msg-gateway-ip:
 	docker network inspect msg-broker-food-microservice --format='{{range .IPAM.Config}}{{.Gateway}}{{end}}'
 
+rebuild-category-service:
+	docker-compose -f $(CATEGORY_COMPOSE_FILE) kill
+	docker-compose -f $(CATEGORY_COMPOSE_FILE) rm --force
+	docker-compose -f $(CATEGORY_COMPOSE_FILE) build
+	docker-compose -f $(CATEGORY_COMPOSE_FILE) up -d
+
+category-service-command:
+	docker-compose -f $(CATEGORY_COMPOSE_FILE) exec php zsh
 
 
