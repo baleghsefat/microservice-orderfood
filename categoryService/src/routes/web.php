@@ -1,18 +1,30 @@
 <?php
 
-/** @var \Laravel\Lumen\Routing\Router $router */
+use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| Application Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register all of the routes for an application.
-| It is a breeze. Simply tell Lumen the URIs it should respond to
-| and give it the Closure to call when that URI is requested.
-|
-*/
+// TODO Do not use string (admin permission)
+Route::group(['prefix' => 'v1', 'middleware' => ['auth:api', 'permission:admin']], function () {
+    Route::post('categories', [
+        'uses' => 'CategoryController@store',
+        'as' => 'v1.categories.store',
+    ]);
+    Route::put('categories/{categoryId}', [
+        'uses' => 'CategoryController@update',
+        'as' => 'v1.categories.update',
+    ]);
+    Route::delete('categories/{categoryId}', [
+        'uses' => 'CategoryController@destroy',
+        'as' => 'v1.categories.destroy',
+    ]);
+});
 
-$router->get('/', function () use ($router) {
-    return $router->app->version();
+Route::group(['prefix' => 'v1',], function () {
+    Route::get('categories', [
+        'uses' => 'CategoryController@index',
+        'as' => 'v1.categories.index',
+    ]);
+    Route::get('categories/{categoryId}', [
+        'uses' => 'CategoryController@show',
+        'as' => 'v1.categories.show',
+    ]);
 });
