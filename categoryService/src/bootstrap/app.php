@@ -62,6 +62,7 @@ $app->singleton(
 $app->configure('app');
 $app->configure('auth');
 $app->configure('jwt');
+$app->configure('rabbitmq');
 
 /*
 |--------------------------------------------------------------------------

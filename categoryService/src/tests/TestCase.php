@@ -2,6 +2,8 @@
 
 namespace Tests;
 
+use App\Jobs\PublishGlobalJob;
+use Illuminate\Support\Facades\Bus;
 use Laravel\Lumen\Testing\TestCase as BaseTestCase;
 
 abstract class TestCase extends BaseTestCase
@@ -12,6 +14,8 @@ abstract class TestCase extends BaseTestCase
     protected function setUp(): void
     {
         parent::setUp();
+
+        Bus::fake([PublishGlobalJob::class]);
 
         $this->artisan('migrate:fresh');
     }

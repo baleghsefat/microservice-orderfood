@@ -2,8 +2,10 @@
 
 namespace Tests;
 
+use App\Jobs\PublishGlobalJob;
 use App\Models\Category;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Bus;
 
 class CategoryTest extends TestCase
 {
@@ -23,6 +25,24 @@ class CategoryTest extends TestCase
 
         $this->assertTrue($response instanceof Category);
         $this->assertEquals($requestData[Category::TITLE], $response[Category::TITLE]);
+    }
+
+    /**
+     * @test
+     */
+    public function publishGlobalJobWillBeDispatchedAfterStoreCategory()
+    {
+        $requestData = Category::factory()->make()->toArray();
+
+        Bus::fake();
+
+        $response = $this->json('post', route('v1.categories.store'), $requestData, $this->authHeader());
+
+        $response = $response->response->getOriginalContent();
+
+        Bus::assertDispatched(function (PublishGlobalJob $job) use ($response) {
+            return $job->data['event'] == 'create' && $job->data[Category::ID] == $response->{Category::ID};
+        });
     }
 
     /**
@@ -65,6 +85,27 @@ class CategoryTest extends TestCase
         $response->assertResponseStatus(Response::HTTP_NO_CONTENT);
 
         $this->assertTrue($category->refresh()[Category::DELETED_AT] !== null);
+    }
+
+    /**
+     * @test
+     */
+    public function publishGlobalJobWillBeDispatchedAfterDeleteCategory()
+    {
+        $category = Category::factory()->create();
+
+        Bus::fake();
+
+        $this->json(
+            'DELETE',
+            route('v1.categories.destroy', ['categoryId' => $category->{Category::ID}]),
+            [],
+            $this->authHeader()
+        );
+
+        Bus::assertDispatched(function (PublishGlobalJob $job) use ($category) {
+            return $job->data['event'] == 'delete' && $job->data[Category::ID] == $category->{Category::ID};
+        });
     }
 
     /**

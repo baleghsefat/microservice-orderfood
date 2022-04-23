@@ -60,7 +60,9 @@ class CategoryController extends Controller
     public function destroy(int $categoryId): JsonResponse
     {
         // TODO use try catch
-        Category::query()->where(Category::ID, $categoryId)->delete();
+        $category = Category::query()->findOrFail($categoryId);
+
+        $category->delete();
 
         return $this->getResponse([], Response::HTTP_NO_CONTENT);
     }
