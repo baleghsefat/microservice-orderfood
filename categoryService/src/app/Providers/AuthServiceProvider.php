@@ -28,19 +28,19 @@ class AuthServiceProvider extends ServiceProvider
     public function boot()
     {
         // TODO refactor
-        Auth::viaRequest('jwt', function (Request $request) {
-            $token = $request->header('authorization');
-            if (isset($token)) {
-                if (isTokenValid($token)) {
-                    $tokenData = optional(tokenData($token));
-                    $user = new User();
-                    $user->first_name = $tokenData['first_name'];
-                    $user->last_name = $tokenData['last_name'];
-                    $user->role = $tokenData['role'];
-
-                    return $user;
-                }
-            }
-        });
+//        Auth::viaRequest('jwt', function (Request $request) {
+//            $token = $request->header('authorization');
+//            if (isset($token)) {
+//                if (isTokenValid($token)) {
+//                    $tokenData = optional(tokenData($token));
+//                    $user = new User();
+//                    $user->first_name = $tokenData['first_name'];
+//                    $user->last_name = $tokenData['last_name'];
+//                    $user->role = $tokenData['role'];
+//
+//                    return $user;
+//                }
+//            }
+//        });
     }
 }

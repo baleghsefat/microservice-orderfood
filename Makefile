@@ -1,9 +1,11 @@
 GATEWAY_COMPOSE_FILE=gateway/docker-compose.yml
 USER_COMPOSE_FILE=userService/docker-compose.yml
 CATEGORY_COMPOSE_FILE=categoryService/docker-compose.yml
+RESTAURANT_COMPOSE_FILE=restaurantService/docker-compose.yml
 MSG_BROKER_NETWORK=msg-broker-food-microservice
 USER_SERVICE_PHP_CONTAINER=php_user_serivce
 CATEGORY_SERVICE_PHP_CONTAINER=php_category_serivce
+RESTAURANT_SERVICE_PHP_CONTAINER=php_restaurant_serivce
 GATEWAY_PHP_CONTAINER=php_gateway
 USER=app
 GROUP=app
@@ -72,4 +74,13 @@ rebuild-category-service:
 category-service-command:
 	docker-compose -f $(CATEGORY_COMPOSE_FILE) exec php zsh
 
+
+rebuild-restaurant-service:
+	docker-compose -f $(RESTAURANT_COMPOSE_FILE) kill
+	docker-compose -f $(RESTAURANT_COMPOSE_FILE) rm --force
+	docker-compose -f $(RESTAURANT_COMPOSE_FILE) build
+	docker-compose -f $(RESTAURANT_COMPOSE_FILE) up -d
+
+restaurant-service-command:
+	docker-compose -f $(RESTAURANT_COMPOSE_FILE) exec php zsh
 
