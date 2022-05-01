@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Interfaces\Models\RestaurantInterface;
+use App\Observers\RestaurantObserver;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -17,8 +18,16 @@ class Restaurant extends Model implements RestaurantInterface
      */
     protected $fillable = [
         self::NAME,
-        self::LAT,
-        self::LNG,
         self::ADDRESS,
     ];
+
+
+    /**
+     * @return void
+     */
+    public static function boot(): void
+    {
+        parent::boot();
+        self::observe([RestaurantObserver::class]);
+    }
 }

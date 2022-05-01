@@ -16,8 +16,6 @@ return new class extends Migration {
         Schema::create(Restaurant::TABLE, function (Blueprint $table) {
             $table->id();
             $table->string(Restaurant::NAME);
-            $table->float(Restaurant::LAT, 15, 12)->nullable();
-            $table->float(Restaurant::LNG, 15, 12)->nullable();
             $table->string(Restaurant::ADDRESS, 512);
             $table->softDeletes();
             $table->timestamps();
