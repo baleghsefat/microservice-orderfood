@@ -9,4 +9,5 @@ interface RestaurantInterface extends BaseModelInterface
     const LAT = 'lat';
     const LNG = 'lng';
     const ADDRESS = 'address';
+    const USER_IDS = 'user_ids';
 }

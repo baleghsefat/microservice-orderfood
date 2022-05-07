@@ -16,6 +16,10 @@ Route::group(['prefix' => 'v1', 'middleware' => ['auth:api', 'permission:admin']
         'uses' => 'RestaurantController@destroy',
         'as' => 'v1.restaurants.destroy',
     ]);
+    Route::put('restaurants/{restaurantId}/users', [
+        'uses' => 'SyncRestaurantUsersController',
+        'as' => 'v1.restaurants.users.update',
+    ]);
 });
 
 Route::group(['prefix' => 'v1',], function () {
